@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-
+import 'package:month_year_picker/month_year_picker.dart';
 import '/app/bindings/initial_binding.dart';
 import '/app/core/values/app_colors.dart';
 import '/app/routes/app_pages.dart';
 import '/flavors/build_config.dart';
 import '/flavors/env_config.dart';
 import 'data/repository/pref_repository.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -31,6 +32,12 @@ class _MyAppState extends State<MyApp> {
       title: _envConfig.appName,
       initialRoute: AppPages.INITIAL,
       initialBinding: InitialBinding(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        MonthYearPickerLocalizations.delegate,
+      ],
       getPages: AppPages.routes,
       // localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: _getSupportedLocal(),

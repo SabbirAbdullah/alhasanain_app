@@ -10,7 +10,7 @@ import '../model/ct_data_ui.dart';
 class CtScreen extends BaseView<CTController> {
   CtScreen(){
     controller.checkTerm();
-    controller.getStudentCTList();
+
 
   }
 
@@ -127,13 +127,8 @@ class CtScreen extends BaseView<CTController> {
         // Display subjects and marks
         Expanded(
           child: Obx(() {
-            String selectedCT = controller.selectedItem.value;
 
-            // Get subjects for the selected CT
-            List<String?> subjects = controller.getSubjectsByCT(selectedCT);
-
-            // If no CT is selected or no subjects found
-            if (selectedCT.isEmpty || subjects.isEmpty) {
+            if (controller.selectedItem.isEmpty ) {
               return const Center(
                 child: Text(
                   "No data available for the selected CT",
@@ -143,15 +138,11 @@ class CtScreen extends BaseView<CTController> {
             }
             // Display subjects and marks
             return ListView.builder(
-              itemCount: subjects.length,
+              itemCount: controller.projectList.length,
               itemBuilder: (context, index) {
                 // Find the project for this subject
-                var project = controller.projectList.firstWhere(
-                      (item) =>
-                  item.title == selectedCT &&
-                      item.subject == subjects[index],
-                  orElse: () => StudentCTResponseUi(),
-                );
+                var project = controller.projectList[index];
+
                 return Padding(
                   padding: const EdgeInsets.only(right: 14.0, left: 14.0, top: 5.0, bottom: 5),
                   child: Container(
@@ -168,7 +159,7 @@ class CtScreen extends BaseView<CTController> {
                         minTileHeight: 40,
                         initiallyExpanded: true,
                         title: Text(
-                          subjects[index]!,
+                          project.subject!,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -199,6 +190,22 @@ class CtScreen extends BaseView<CTController> {
                                     ),
                                     Text(
                                       project.obtainMarks!.isNotEmpty
+                                          ? project.obtainMarks!
+                                          : "N/A",
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Color(0xff565656)),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "CT: ",
+                                      style: TextStyle(
+                                          fontSize: 12, color: Color(0xff565656)),
+                                    ),
+                                    Text(
+                                      project.title!.isNotEmpty
                                           ? project.obtainMarks!
                                           : "N/A",
                                       style: const TextStyle(
@@ -240,78 +247,78 @@ class CtScreen extends BaseView<CTController> {
 }
 
 
-class classtest_tile extends StatelessWidget {
-  const classtest_tile({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        border: Border.all(
-            color: Colors.black12
-        ),
-      ),
-      child: Padding(
-          padding: const EdgeInsets.all(16),
-          child:Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    decoration:BoxDecoration(
-                        color: const Color(0xff07548a),
-                        borderRadius: BorderRadius.circular(16)
-                    ),
-                    child:const Padding(
-                      padding: EdgeInsets.only(left: 10,right: 10,top: 4,bottom: 4),
-                      child: Text("",style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10
-                      ),),
-                    ),
-                  ),
-                  const Spacer(),
-                  const Text("12/02/1759",style: TextStyle(color: Color(0xff565656),fontSize: 10),)
-                ],
-              ),
-              Theme(
-
-                data:ThemeData().copyWith(dividerColor: Colors.transparent) ,
-                child: ExpansionTile(
-                  tilePadding: EdgeInsets.zero,
-                  title: const Text("Chapter 2: Thermodynamics",style: TextStyle(fontWeight:FontWeight.bold,color: Color(0xff565656),fontSize: 12),),
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Text("Obtain Marks",style: TextStyle(color: Color(0xff565656),fontSize: 12),),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0,right: 4),
-                              child: SvgPicture.asset("assets/images/arrow.svg",),
-                            ),
-                            const Text("80",style: TextStyle(color: Color(0xff565656),fontSize: 12),),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text("Total Marks",style: TextStyle(color: Color(0xff565656),fontSize: 12),),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0,right: 4),
-                              child: SvgPicture.asset("assets/images/arrow.svg",),
-                            ),   const Text("100",style: TextStyle(color: Color(0xff565656),fontSize: 12),),  ],
-                        )
-                      ],
-                    )
-                  ],),
-              )
-            ],
-          )
-      ),
-    );
-  }
-}
+// class classtest_tile extends StatelessWidget {
+//   const classtest_tile({
+//     super.key,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(16),
+//         color: Colors.white,
+//         border: Border.all(
+//             color: Colors.black12
+//         ),
+//       ),
+//       child: Padding(
+//           padding: const EdgeInsets.all(16),
+//           child:Column(
+//             children: [
+//               Row(
+//                 children: [
+//                   Container(
+//                     decoration:BoxDecoration(
+//                         color: const Color(0xff07548a),
+//                         borderRadius: BorderRadius.circular(16)
+//                     ),
+//                     child:const Padding(
+//                       padding: EdgeInsets.only(left: 10,right: 10,top: 4,bottom: 4),
+//                       child: Text("",style: TextStyle(
+//                           color: Colors.white,
+//                           fontSize: 10
+//                       ),),
+//                     ),
+//                   ),
+//                   const Spacer(),
+//                   const Text("12/02/1759",style: TextStyle(color: Color(0xff565656),fontSize: 10),)
+//                 ],
+//               ),
+//               Theme(
+//
+//                 data:ThemeData().copyWith(dividerColor: Colors.transparent) ,
+//                 child: ExpansionTile(
+//                   tilePadding: EdgeInsets.zero,
+//                   title: const Text("Chapter 2: Thermodynamics",style: TextStyle(fontWeight:FontWeight.bold,color: Color(0xff565656),fontSize: 12),),
+//                   children: [
+//                     Column(
+//                       children: [
+//                         Row(
+//                           children: [
+//                             const Text("Obtain Marks",style: TextStyle(color: Color(0xff565656),fontSize: 12),),
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 4.0,right: 4),
+//                               child: SvgPicture.asset("assets/images/arrow.svg",),
+//                             ),
+//                             const Text("80",style: TextStyle(color: Color(0xff565656),fontSize: 12),),
+//                           ],
+//                         ),
+//                         Row(
+//                           children: [
+//                             const Text("Total Marks",style: TextStyle(color: Color(0xff565656),fontSize: 12),),
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 4.0,right: 4),
+//                               child: SvgPicture.asset("assets/images/arrow.svg",),
+//                             ),   const Text("100",style: TextStyle(color: Color(0xff565656),fontSize: 12),),  ],
+//                         )
+//                       ],
+//                     )
+//                   ],),
+//               )
+//             ],
+//           )
+//       ),
+//     );
+//   }
+// }

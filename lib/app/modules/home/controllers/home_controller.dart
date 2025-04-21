@@ -6,7 +6,9 @@ import 'package:alhasanain_app/app/data/repository/student_data_repository.dart'
 import 'package:alhasanain_app/app/core/widget/event&news/models/event_%20news_ui_data.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../data/model/exam_schedule__model.dart';
 import '../../../data/model/student_data_response.dart';
+import '../../../data/repository/exam_schedule_repository_impl.dart';
 import '../../../data/repository/pref_repository.dart';
 import '../../../data/repository/student_payment_repository.dart';
 import '../../daily_lesson/model/day_model.dart';
@@ -130,6 +132,39 @@ class HomeController extends BaseController {
     }
   }
 
+  final ExamScheduleRepositoryImpl _scheduleRepository = Get.put(ExamScheduleRepositoryImpl());
+  var latestExamSchedules = <ExamScheduleModel>[].obs;
+
+  void fetchExamSchedule() async {
+    try {
+      isLoading.value = true;
+
+      var  data = await _scheduleRepository.getExamSchedule(
+        classId: studentDataList[0].cId!,
+        session: studentDataList[0].session!,
+      );
+
+      if (data.isNotEmpty) {
+        if (data.length == 1) {
+          latestExamSchedules.value = [data.first];
+        } else {
+          // Find the latest one by date
+          data.sort((a, b) => b.date!.compareTo(a.date!)); // Descending
+          latestExamSchedules.value = [data.first];
+          print(" ${latestExamSchedules}");// Take the most recent
+        }
+      } else {
+        latestExamSchedules.clear(); // No data
+      }
+
+    } catch (e) {
+     print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
   getEventNewsData(String session, String className) async {
     EventNewsQueryPrem eventNewsQueryPrem =
         EventNewsQueryPrem(session: session, className: className, limit: 5, page: 1);
@@ -211,6 +246,7 @@ class HomeController extends BaseController {
             ))
         .toList();
     _studentDataListController(repoList);
+    fetchExamSchedule();
 
   }
 
@@ -221,6 +257,7 @@ class HomeController extends BaseController {
   @override
   void onInit() {
     checkTerm();
+    fetchExamSchedule();
     var data = Get.arguments;
     if (data is String) {
       id = data;

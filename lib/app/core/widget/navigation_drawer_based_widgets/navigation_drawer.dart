@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/repository/pref_repository.dart';
 import '../../../modules/about_alhasanain/view/about_alhasanain.dart';
+import '../../../modules/academic_calender/views/academic_calender_view.dart';
+import '../../../modules/academic_calender/views/acedmic_calender_view.dart';
 import '../../../modules/account_delete/view/delete_view.dart';
 import '../../../modules/complain/view/complain.dart';
 import '../../../modules/eca/ecaClub/view/ecaClub_view.dart';
@@ -94,7 +96,8 @@ class _NavDrawerState extends State<NavDrawer> {
                 ListTile(
                   leading: Icon(Icons.calendar_month),
                   title: Text('Academic Calender'),
-                  onTap: () =>_navigateAcademicCalender(widget.studentDataResponseUi),
+                  onTap: () =>Get.to(()=>AcademicCalendarPage())
+                  // onTap: () =>_navigateAcademicCalender(widget.studentDataResponseUi),
                 ),
         
                 ListTile(

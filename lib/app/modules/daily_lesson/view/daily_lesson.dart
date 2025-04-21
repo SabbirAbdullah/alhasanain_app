@@ -74,10 +74,16 @@ class _DailyLessonState extends State<DailyLesson> {
                 items: controller.weeklyDates.map((WeeklyDate week) {
                   return DropdownMenuItem<WeeklyDate>(
 
+
                     value: week,
-                    child: Text(week.weekName.isNotEmpty
-                        ? week.weekName
-                        : '${week.startDate} - ${week.endDate}'),
+                    child: ListTile(minTileHeight: 10,
+                      title: Text(week.weekName.isNotEmpty
+                          ? week.weekName
+                          : '${week.startDate} - ${week.endDate}'),
+                      trailing: Text(week.weekName.isNotEmpty
+                          ? '${week.startDate} - ${week.endDate}'
+                      : ""),
+                    ),
                   );
                 }).toList(),
                 onChanged: (WeeklyDate? selectedWeek) {

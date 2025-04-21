@@ -20,14 +20,7 @@ class EventNewsTiles extends StatelessWidget {
     DateTime inputDate = DateTime.parse(eventNewsUiData.fromData);
     String formattedDateString = "${inputDate.day.toString().padLeft(2, '0')}/${inputDate.month.toString().padLeft(2, '0')}/${inputDate.year}";
     return InkWell(
-      onTap: () => showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog.fullscreen(
-            child: _dialogContent(context),
-          );
-        },
-      ),
+      onTap: () =>Get.to(()=> AllEventNews(eventNewsUiData: eventNewsUiData,)),
       child: Container( height: 271,width: 339,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
         child:Column(
@@ -143,49 +136,60 @@ class EventNewsTiles extends StatelessWidget {
     );
   }
 
-  Widget _dialogContent(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppBar(title: Text("Event & News"),centerTitle: true,),
-          CachedNetworkImage(
-            width: Get.width,
-            height: 350,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                width: Get.width,
-                height: 350,
-                color: Colors.white, // Optional: You can use any color here
+
+}
+
+class AllEventNews extends StatelessWidget {
+  const AllEventNews({super.key, required this.eventNewsUiData});
+  final EventNewsUiData eventNewsUiData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppBar(title: Text("Event & News"),centerTitle: true,),
+            CachedNetworkImage(
+              width: Get.width,
+              height: 350,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: Get.width,
+                  height: 350,
+                  color: Colors.white, // Optional: You can use any color here
+                ),
               ),
+              imageUrl: "${AppUrl.baseImageUrl}${eventNewsUiData.imageLink}",
+              errorWidget: (BuildContext context, String url, dynamic error) =>
+              const Icon(Icons.error),
             ),
-            imageUrl: "${AppUrl.baseImageUrl}${eventNewsUiData.imageLink}",
-            errorWidget: (BuildContext context, String url, dynamic error) =>
-                const Icon(Icons.error),
-          ),
-          SizedBox(height: AppValues.halfPadding,),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppValues.halfPadding,vertical: AppValues.padding_2),
-            child: Text(eventNewsUiData.fromData,style: Theme.of(context).textTheme.titleMedium?.copyWith(color:Colors.blue),),
-          ),
-      
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppValues.halfPadding,vertical: AppValues.padding_2),
-            child: Text(eventNewsUiData.name,style: Theme.of(context).textTheme.titleLarge,),
-          ),
-      
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppValues.halfPadding,vertical: AppValues.padding_2),
-            child: Text(eventNewsUiData.description),
-          ),
-        ],
-      ),
+            SizedBox(height: AppValues.halfPadding,),
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: AppValues.padding,vertical: AppValues.padding_2),
+              child: Text(eventNewsUiData.fromData,style: Theme.of(context).textTheme.titleMedium?.copyWith(color:Colors.blue),),
+            ),
+
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: AppValues.padding,vertical: AppValues.padding_2),
+              child: Text(eventNewsUiData.name,style: Theme.of(context).textTheme.titleLarge,),
+            ),
+
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: AppValues.padding,vertical: AppValues.padding_2),
+              child: Text(eventNewsUiData.description),
+            ),
+          ],
+        ),
+      )
     );
   }
 }
+

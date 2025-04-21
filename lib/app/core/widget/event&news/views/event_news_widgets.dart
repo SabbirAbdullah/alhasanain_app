@@ -20,11 +20,28 @@ class _EventNewsWidgetsState extends State<EventNewsWidgets> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          
+        widget.studentEventNews.isEmpty
+        ?Container(
+          width: MediaQuery.of(context).size.width * 0.55,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 8,),
+              Image.asset("assets/empty.png",height: 50,width: 50,),
+              SizedBox(height: 4,),
+              Text("No lesson plan for today",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 11,color: Colors.grey),)
+            ],
+          ),
+        )
+        :SizedBox(
           height: 100,
           child: ListView.builder(
             padding: EdgeInsets.only(left:AppValues.halfPadding,right: AppValues.halfPadding),
@@ -40,21 +57,18 @@ class _EventNewsWidgetsState extends State<EventNewsWidgets> {
 }
 
 class EventNewsCard extends StatelessWidget {
-  const EventNewsCard({Key? key, required this.eventNewsUiData}) : super(key: key);
+  const EventNewsCard({Key? key, required this.eventNewsUiData})
+      : super(key: key);
   final EventNewsUiData eventNewsUiData;
+
   @override
   Widget build(BuildContext context) {
     DateTime inputDate = DateTime.parse(eventNewsUiData.fromData);
-    String formattedDateString = "${inputDate.day.toString().padLeft(2, '0')}/${inputDate.month.toString().padLeft(2, '0')}/${inputDate.year}";
-    return  InkWell(
-        onTap: () => showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog.fullscreen(
-              child: _dialogContent(context),
-            );
-          },
-        ),
+    String formattedDateString = "${inputDate.day.toString().padLeft(
+        2, '0')}/${inputDate.month.toString().padLeft(2, '0')}/${inputDate
+        .year}";
+    return InkWell(
+      onTap: () =>Get.to(()=> EventNewsPage(eventNewsUiData: eventNewsUiData,)),
       child: Padding(
         padding: EdgeInsets.only(left: 1.0),
         child: Card(
@@ -92,7 +106,8 @@ class EventNewsCard extends StatelessWidget {
                   SizedBox(height: AppValues.padding_4),
                   Flexible(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: AppValues.padding_4),
+                      padding: const EdgeInsets.only(
+                          right: AppValues.padding_4),
                       child: Text(
                         maxLines: 2,
                         eventNewsUiData.description,
@@ -112,53 +127,65 @@ class EventNewsCard extends StatelessWidget {
     );
   }
 
+}
 
-  Widget _dialogContent(BuildContext context) {
+class EventNewsPage extends StatelessWidget {
+  const EventNewsPage({super.key, required this.eventNewsUiData});
+  final EventNewsUiData eventNewsUiData;
+  @override
+  Widget build(BuildContext context) {
     DateTime inputDate = DateTime.parse(eventNewsUiData.fromData);
-    String formattedDateString = "${inputDate.day.toString().padLeft(2, '0')}/${inputDate.month.toString().padLeft(2, '0')}/${inputDate.year}";
+    String formattedDateString = "${inputDate.day.toString().padLeft(
+        2, '0')}/${inputDate.month.toString().padLeft(2, '0')}/${inputDate
+        .year}";
+    return Scaffold(
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppBar(title: Text("Event & News"),centerTitle: true,),
-          CachedNetworkImage(
-            width: Get.width,
-            height: 350,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
+      body: Scaffold(
+        appBar: AppBar(title: Text("Event & News"),centerTitle: true,),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              CachedNetworkImage(
                 width: Get.width,
                 height: 350,
-                color: Colors.white, // Optional: You can use any color here
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    width: Get.width,
+                    height: 350,
+                    color: Colors.white, // Optional: You can use any color here
+                  ),
+                ),
+                imageUrl: "${AppUrl.baseImageUrl}${eventNewsUiData.imageLink}",
+                errorWidget: (BuildContext context, String url, dynamic error) =>
+                const Icon(Icons.error),
               ),
-            ),
-            imageUrl: "${AppUrl.baseImageUrl}${eventNewsUiData.imageLink}",
-            errorWidget: (BuildContext context, String url, dynamic error) =>
-            const Icon(Icons.error),
-          ),
-          SizedBox(height: AppValues.halfPadding,),
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: AppValues.halfPadding,vertical: AppValues.padding_2),
-            child: Text(formattedDateString,style: Theme.of(context).textTheme.titleMedium?.copyWith(color:Colors.blue),),
-          ),
+              SizedBox(height: AppValues.halfPadding,),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: AppValues.padding,vertical: AppValues.padding_2),
+                child: Text(formattedDateString,style: Theme.of(context).textTheme.titleMedium?.copyWith(color:Colors.blue),),
+              ),
 
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: AppValues.halfPadding,vertical: AppValues.padding_2),
-            child: Text(eventNewsUiData.name,style: Theme.of(context).textTheme.titleLarge,),
-          ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: AppValues.padding,vertical: AppValues.padding_2),
+                child: Text(eventNewsUiData.name,style: Theme.of(context).textTheme.titleLarge,),
+              ),
 
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: AppValues.halfPadding,vertical: AppValues.padding_2),
-            child: Text(eventNewsUiData.description),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: AppValues.padding,vertical: AppValues.padding_2),
+                child: Text(eventNewsUiData.description),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-    );
-  }
-}
+    ) ;
+  }}
+

@@ -32,7 +32,6 @@ class CTController extends BaseController {
   // Dropdown items
   final List<String> items = ["CT - 1", "CT - 2", "CT - 3", "CT - 4", "CT - 5", "CT - 6"];
 
-  // Selected item
   RxString selectedItem = ''.obs;
 
   // Update selected item
@@ -58,8 +57,8 @@ class CTController extends BaseController {
       session: "${studentDataResponseUi.studentSession}",
       student_id: "${studentDataResponseUi.studentId}",
       termName: term.value,
-      subject: "",
-      date: '',
+      title: selectedItem.value
+
     );
 
     var githubRepoSearchService = _repository.getCTData(queryParam);
