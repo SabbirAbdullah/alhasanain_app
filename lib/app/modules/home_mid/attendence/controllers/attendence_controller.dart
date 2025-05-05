@@ -62,9 +62,7 @@ class AttendenceController extends BaseController{
 
 
   void getAttendence(String date) {
-    if (!pagingController.canLoadNextPage()) return;
 
-    pagingController.isLoadingPage = true;
 
     var queryParam = StudentAttendenceQueryParam(
         section: "",
@@ -78,7 +76,7 @@ class AttendenceController extends BaseController{
         school: "",
         studentName: "",
          date:date,
-      pageNumber: pagingController.pageNumber,
+
 
     );
 
@@ -89,7 +87,6 @@ class AttendenceController extends BaseController{
       onSuccess: _handleProjectListResponseSuccess,
     );
 
-    pagingController.isLoadingPage = false;
   }
 
   onRefreshPage() {
@@ -114,15 +111,9 @@ class AttendenceController extends BaseController{
     ))
         .toList();
 
-    if (_isLastPage(pagingController.pageNumber, 2)) {
-      pagingController.appendLastPage(repoList!);
-    } else {
-      pagingController.appendPage(repoList!);
-    }
 
-    var newList = [...pagingController.listItems];
 
-    _githubProjectListController(newList);
+    _githubProjectListController(repoList);
 
 
   }

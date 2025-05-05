@@ -9,13 +9,12 @@ import "academic_eventTile_view.dart";
 
 class AcademicCalenderView extends BaseView<AcademicCalenderController> {
  AcademicCalenderView(){
-   controller.getMonthAcademicEvents('2024-01');
+   controller.getMonthAcademicEvents('2025-04');
  }
 
   @override
   PreferredSizeWidget? appBar(BuildContext context) {
     return CustomAppBar(appBarTitleText: "Academic Calender");
-
   }
 
   @override
@@ -33,7 +32,7 @@ class AcademicCalenderView extends BaseView<AcademicCalenderController> {
             labelColor: AppColors.appBarColor,
             physics: const ScrollPhysics(),
             onTap: (index){
-              controller.getMonthAcademicEvents('2024-0${index+1}');
+              controller.getMonthAcademicEvents('2025-0${index+1}');
             },
               isScrollable: true,
               tabAlignment: TabAlignment.start,

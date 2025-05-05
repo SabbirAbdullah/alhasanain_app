@@ -43,8 +43,6 @@
 //    source = "../.."
 //}
 
-
-
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -105,6 +103,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+
 android {
     namespace "com.alhasanain.studant.parents.app.alhasanain_app"
     sourceSets {
@@ -120,7 +119,13 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     lintOptions {
         checkReleaseBuilds false
     }
@@ -134,7 +139,9 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -160,6 +167,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }
 
 

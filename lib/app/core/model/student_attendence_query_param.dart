@@ -14,7 +14,7 @@ class StudentAttendenceQueryParam {
   String? creatorID;
   String? creatorName;
   int? perPage;
-  int pageNumber;
+  int ? pageNumber;
 
   // "className":"FIVE (V)",
   // "section":"B 1",
@@ -25,7 +25,7 @@ class StudentAttendenceQueryParam {
   StudentAttendenceQueryParam({
     this.section,
  this.perPage,
-    required this.pageNumber,
+     this.pageNumber,
     this.session,
     this.termName,
     this.id,

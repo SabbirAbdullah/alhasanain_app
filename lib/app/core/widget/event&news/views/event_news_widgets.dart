@@ -1,4 +1,5 @@
 
+import 'package:alhasanain_app/app/core/values/app_colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,20 +26,22 @@ class _EventNewsWidgetsState extends State<EventNewsWidgets> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.studentEventNews.isEmpty
-        ?Container(
-          width: MediaQuery.of(context).size.width * 0.55,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 8,),
-              Image.asset("assets/empty.png",height: 50,width: 50,),
-              SizedBox(height: 4,),
-              Text("No lesson plan for today",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 11,color: Colors.grey),)
-            ],
+        ?Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.55,
+            decoration: BoxDecoration(
+              color: AppColors.pageBackground,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 8,),
+                Image.asset("assets/empty.png",height: 50,width: 50,),
+                SizedBox(height: 4,),
+                Text("No event available",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 11,color: Colors.grey),)
+              ],
+            ),
           ),
         )
         :SizedBox(
@@ -60,6 +63,7 @@ class EventNewsCard extends StatelessWidget {
   const EventNewsCard({Key? key, required this.eventNewsUiData})
       : super(key: key);
   final EventNewsUiData eventNewsUiData;
+
 
   @override
   Widget build(BuildContext context) {

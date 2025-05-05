@@ -28,6 +28,7 @@ abstract class Routes {
   static const PRIVACY_POLICY=_Paths.PRIVACY_POLICY;
   static const DAILY_LESSON = _Paths.DAILY_LESSON;
   static const TERMS_CONDITION = _Paths.TERMS_CONDITION;
+  static const NOTIFICATION = _Paths.NOTIFICATION;
 
 
 }
@@ -57,5 +58,6 @@ abstract class _Paths {
   static const PRIVACY_POLICY='/privacy_policy';
   static const DAILY_LESSON = '/daily_lesson';
   static const TERMS_CONDITION = "/terms_condition";
+  static const NOTIFICATION = "/notification_view";
 
 }

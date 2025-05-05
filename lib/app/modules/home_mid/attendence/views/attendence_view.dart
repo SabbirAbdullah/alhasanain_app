@@ -19,107 +19,88 @@ class AttendanceScreen extends BaseView<AttendenceController> {
   }
   @override
   Widget body(BuildContext context) {
-    return RefreshIndicator(
-
-      onRefresh: () async {
-        controller.getAttendence(controller.formattedDate);
-      },
-      child:
-
-         Column(
-           children: [
-            // InkWell(
-            //   onTap:(){
-            //     showMonthPicker(
-            //       context: context,
-            //       initialDate: DateTime.now(),
-            //     ).then((date) {
-            //       if (date != null) {
-            //         controller.now=date;
-            //         controller.formattedDate=DateFormat('yyyy-MM').format(controller.now);
-            //         controller.getDateAttendence(controller.formattedDate);
-            //       }
-            //     });
-            //   } ,
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //         boxShadow: [
-            //           BoxShadow(
-            //               color: Colors.grey.shade100,
-            //               spreadRadius: 2,
-            //               blurRadius: 1
-            //           )]
-            //     ),
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(left: 16.0,right: 16.0,top: 8,bottom: 8),
-            //       child: Row(children: [
-            //
-            //         Expanded(
-            //           child: Container(
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(8),
-            //               color: Colors.white,
-            //               border: Border.all(
-            //                 color: Colors.black12,
-            //               ),
-            //             ),
-            //             child:Padding(
-            //               padding: EdgeInsets.zero,
-            //               child: SizedBox(
-            //                 height: 45,
-            //                 child: Row(
-            //                   children: [
-            //                     IconButton(
-            //                         padding:EdgeInsets.zero,
-            //                         onPressed: (){
-            //                           showMonthPicker(
-            //                             context: context,
-            //                             initialDate: DateTime.now(),
-            //                           ).then((date) {
-            //                             if (date != null) {
-            //                               // setState(() {
-            //                               //   selectedDate = date;
-            //                               // });
-            //                             }
-            //                           });
-            //
-            //                         },
-            //                         icon: const Icon(Icons.date_range,size:20)),
-            //                     const Text("Month",style: TextStyle(fontSize: 12),),
-            //                     const SizedBox(width: 10,),
-            //                   ],
-            //                 ),
-            //               ),
-            //             ),
-            //           ),
-            //         )
-            //       ],),
-            //     ),
-            //   ),
-            // ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const AttendenceHeader(),
-                 Obx(() => controller.projectList.isEmpty? const Padding(
-                   padding: EdgeInsets.all(AppValues.extraLargeSpacing),
-                   child: Text("No attendance found"),
-                 ):ListView.builder(
-                   physics: const NeverScrollableScrollPhysics(),
-                   shrinkWrap: true,
-                   itemCount: controller.projectList.length,
-                   itemBuilder: (context, index) {
-                     return AttendenceWidget(studentAttendenceResponseUI: controller.projectList[index],);
-                   },))
-                ],
+    return SingleChildScrollView(
+      child: Column(
+             children: [
+              InkWell(
+                onTap:(){
+                  showMonthPicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                  ).then((date) {
+                    if (date != null) {
+                      controller.now=date;
+                      controller.formattedDate=DateFormat('yyyy-MM').format(controller.now);
+                      controller.getAttendence(controller.formattedDate);
+                    }
+                  });
+                } ,
+                child: Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade100,
+                            spreadRadius: 2,
+                            blurRadius: 1
+                        )]
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0,right: 16.0,top: 8,bottom: 8),
+                    child: Row(children: [
+      
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.black12,
+                            ),
+                          ),
+                          child:Padding(
+                            padding: EdgeInsets.zero,
+                            child: SizedBox(
+                              height: 45,
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 8,),
+                                  Icon(Icons.date_range,size:20),
+                                  SizedBox(width: 8,),
+                                   Text(controller.formattedDate,style: TextStyle(fontSize: 12),),
+                                  const SizedBox(width: 10,),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],),
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-
+      
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const AttendenceHeader(),
+                   Obx(() => controller.projectList.isEmpty? const Padding(
+                     padding: EdgeInsets.all(AppValues.extraLargeSpacing),
+                     child: Text("No attendance found"),
+                   ):ListView.builder(
+                    
+                     shrinkWrap: true,
+                     itemCount: controller.projectList.length,
+                     itemBuilder: (context, index) {
+                       return AttendenceWidget(studentAttendenceResponseUI: controller.projectList[index],);
+                     },))
+                  ],
+                ),
+              ),
+            ],
+          ),
     );
+
     throw UnimplementedError();
   }
 
@@ -134,6 +115,14 @@ class AttendenceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _formatDate(String date) {
+      try {
+        DateTime parsedDate = DateTime.parse(date); // Assuming date is '2025-04-22'
+        return DateFormat('dd-MM-yyyy').format(parsedDate);
+      } catch (e) {
+        return date; // Return original in case of error
+      }
+    }
     return Column(
       children: [
         const Divider(),
@@ -144,8 +133,11 @@ class AttendenceWidget extends StatelessWidget {
             children: [
 
               Container(
-                width:MediaQuery.of(context).size.width*0.5,
-                child:Text("${studentAttendenceResponseUI.date}",style: const TextStyle(color: Color(0xff565656),fontSize: 12),),
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Text(
+                  _formatDate(studentAttendenceResponseUI.date!),
+                  style: const TextStyle(color: Color(0xff565656), fontSize: 12),
+                ),
               ),
 
               if (studentAttendenceResponseUI.attendance=="1") const Padding(

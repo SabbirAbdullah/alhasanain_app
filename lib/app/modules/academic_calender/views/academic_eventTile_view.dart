@@ -66,7 +66,6 @@ class AcademicEventTile extends StatelessWidget {
                                     ),
                                     width: 54,
 
-
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             topRight:
@@ -167,7 +166,6 @@ String getWeekdayName(DateTime date) {
   if (date == null) {
     return 'Invalid Date';
   }
-
   // Get the weekday index (0 for Monday, 1 for Tuesday, etc.)
   int weekdayIndex = date.month - 1;
 

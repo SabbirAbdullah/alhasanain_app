@@ -1,15 +1,15 @@
 import '/app/core/values/app_values.dart';
 
 class StudentCTQueryParam {
-  String className;
-  String section;
-  String session;
-  String termName;
-  String subject;
-  int perPage;
-  int pageNumber;
-  String student_id;
-  String? date;
+  String ? className;
+  String? section;
+  String? session;
+  String? termName;
+  String ? subject;
+  int ? perPage;
+  int ? pageNumber;
+  String?  student_id;
+  String? title;
   String? creatorID;
   String? creatorName;
 
@@ -19,8 +19,8 @@ class StudentCTQueryParam {
     required this.session,
     required this.termName,
     required this.student_id,
-    required this.subject,
-    required this.date,
+    this.subject,
+    required this.title,
     this.perPage = AppValues.defaultPageSize,
     this.pageNumber = AppValues.defaultPageNumber,
   });

@@ -19,24 +19,32 @@ class CTController extends BaseController {
   StudentDataResponseUi studentDataResponseUi = StudentDataResponseUi();
   StudentCTResponseUi studentCTResponseUi = StudentCTResponseUi();
   final pagingController = PagingController<StudentCTResponseUi>();
-  RxString term = ''.obs;
-
-  void checkTerm() {
-    final now = DateTime.now();
-    if (now.month >= 1 && now.month <= 6) {
-      term.value = 'Final Term';
-    } else if (now.month >= 7 && now.month <= 12) {
-      term.value = 'Mid Term';
-    }
-  }
+  // RxString term = ''.obs;
+  //
+  // void checkTerm() {
+  //   final now = DateTime.now();
+  //   if (now.month >= 1 && now.month <= 6) {
+  //     term.value = 'Final Term';
+  //   } else if (now.month >= 7 && now.month <= 12) {
+  //     term.value = 'Mid Term';
+  //   }
+  // }
+  final List<String> terms = ["Final Term","Mid Term",];
+  RxString selectedTerm = ''.obs;
   // Dropdown items
-  final List<String> items = ["CT - 1", "CT - 2", "CT - 3", "CT - 4", "CT - 5", "CT - 6"];
+  final List<String> items = ["CT - 1", "CT - 2",];
 
   RxString selectedItem = ''.obs;
 
   // Update selected item
   void updateSelectedItem(String value) {
     selectedItem.value = value;
+
+  }
+
+  void updateTerm(String value) {
+    selectedTerm.value = value;
+
   }
 
   // Function to get subjects by CT title
@@ -56,7 +64,7 @@ class CTController extends BaseController {
       section: "${studentDataResponseUi.section}",
       session: "${studentDataResponseUi.studentSession}",
       student_id: "${studentDataResponseUi.studentId}",
-      termName: term.value,
+      termName: selectedTerm.value,
       title: selectedItem.value
 
     );
@@ -84,28 +92,20 @@ class CTController extends BaseController {
       session: e.session != null ? e.session! : "",
     ))
         .toList();
+    projectList.clear();  // clear old data
 
-    if (_isLastPage(pagingController.pageNumber, response.totalPage!)) {
-      pagingController.appendLastPage(repoList!);
-    } else {
-      pagingController.appendPage(repoList!);
-    }
+    _githubProjectListController(repoList);
 
-    var newList = [...pagingController.listItems];
-    _githubProjectListController(newList);
   }
 
-  bool _isLastPage(int currentPage, int totalCount) {
-    return currentPage >= totalCount;
-  }
 
   @override
   void onInit() {
-    checkTerm();
+
     var dataModel = Get.arguments;
     if (dataModel is StudentDataResponseUi) {
       studentDataResponseUi = dataModel;
-      getStudentCTList();
+
     }
     super.onInit();
   }

@@ -23,23 +23,26 @@ class FeesCard extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "${dataModel.amount}",
-                      style: greenAmountStyle,
-                    ),
-                    Text(
-                      dataModel.balance == 0 && dataModel.balance != 0
-                          ? " (${dataModel.balance} Due)"
-                          : "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                        fontSize: 12,
-                      ),
-                    ),
+                    dataModel.balance == 0
+                    ?Text("৳ ${dataModel.amount}",
+                      style: greenAmountStyle
+                    )
+                        :Row(
+                          children: [
+                            Text("৳ ${dataModel.amount} ",style:greenAmountStyle ,),
+                            Text("(Due: ${dataModel.balance})",style:redAmountStyle ,)
+                          ],
+                        ),
+                    dataModel.balance == 0
+                    ?Container(padding: EdgeInsets.only(left: 8,right: 8),
+                      decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(50)),
+                      child: Text("Paid",style: TextStyle(color: Colors.white,fontSize: 11),),)
+                        : Container(padding: EdgeInsets.only(left: 8,right: 8),
+                      decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(50)),
+                      child: Text("Due",style:  TextStyle(color: Colors.white,fontSize: 11),),)
                   ],
                 ),
                 Text(
@@ -59,7 +62,7 @@ class FeesCard extends StatelessWidget {
                 Text(
                   dataModel.feesMonth=='Null'?'N/A':"${getMonthName(dataModel.feesMonth)}",
                   style: TextStyle(
-                      color: Colors.green,
+                      color: Colors.black87,
                       fontWeight: FontWeight.w600,
                       fontSize: 13),
                 ),
@@ -72,7 +75,7 @@ class FeesCard extends StatelessWidget {
                 Text(
                   "${dataModel.dueDate}",
                   style: TextStyle(
-                      color: Colors.red,
+                      color: Colors.black87,
                       fontWeight: FontWeight.w600,
                       fontSize: 13),
                 ),

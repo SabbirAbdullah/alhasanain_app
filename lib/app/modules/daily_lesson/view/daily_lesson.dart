@@ -1,6 +1,7 @@
 import 'package:alhasanain_app/app/core/widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../core/values/app_colors.dart';
 import '../../home/controllers/home_controller.dart';
 import '../controllers/day_schedule_controller.dart';
@@ -30,79 +31,126 @@ class _DailyLessonState extends State<DailyLesson> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Obx(() {
-              if (controller.isLoading.value) {
-                return const Loading(); // Reset if not found
-              }
-              // Check if the selected week exists in the list
-              if (!controller.weeklyDates.contains(controller.selectedWeek.value)) {
-                controller.selectedWeek.value = null;
-                // Reset if not found
-              }
-              return DropdownButtonFormField<WeeklyDate>(
-                isExpanded: true,dropdownColor: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                decoration:     InputDecoration(
-                  contentPadding: const EdgeInsets.only(left:16, right: 8, top: 8, bottom: 8),
-                  filled: true,
-                  fillColor: Colors.white,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black12,
-
+            Row(
+              children: [
+                Expanded(
+                  child: Obx(() => DropdownButtonFormField<int>(
+                    isExpanded: true,dropdownColor: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    decoration:     InputDecoration(
+                      contentPadding: const EdgeInsets.only(left:16, right: 8, top: 8, bottom: 8),
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.black12,
+                  
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.black12,
+                  
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.black12,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black12,
-
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black12,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                    hint: const Text("Select Month"),
+                    value: controller.selectedMonth.value,
+                    onChanged: (int? value) {
+                      if (value != null) {
+                        controller.filterWeeksByMonth(value);
+                      }
+                    },
+                    items: List.generate(12, (index) {
+                      final monthNumber = index + 1;
+                      final monthName = DateFormat.MMMM().format(DateTime(0, monthNumber));
+                      return DropdownMenuItem(
+                        value: monthNumber,
+                        child: Text(monthName),
+                      );
+                    }),
+                  )),
                 ),
+                SizedBox(width: 6,),
+                Expanded(
+                  child: Obx(() {
+                    // if (controller.isLoading.value) {
+                    //   return SizedBox.shrink();// Reset if not found
+                    // }
+                    // Check if the selected week exists in the list
+                    if (!controller.filteredWeeks.contains(controller.selectedWeek.value)) {
+                      controller.selectedWeek.value = null;
+                      // Reset if not found
+                    }
+                    return DropdownButtonFormField<WeeklyDate>(
+                        isExpanded: true,dropdownColor: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        decoration:     InputDecoration(
+                          contentPadding: const EdgeInsets.only(left:16, right: 8, top: 8, bottom: 8),
+                          filled: true,
+                          fillColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12,
 
-                hint: const Text('Select a Week',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
-                value: controller.selectedWeek.value,
-                items: controller.weeklyDates.map((WeeklyDate week) {
-                  return DropdownMenuItem<WeeklyDate>(
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12,
 
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
 
-                    value: week,
-                    child: ListTile(minTileHeight: 10,
-                      title: Text(week.weekName.isNotEmpty
-                          ? week.weekName
-                          : '${week.startDate} - ${week.endDate}'),
-                      trailing: Text(week.weekName.isNotEmpty
-                          ? '${week.startDate} - ${week.endDate}'
-                      : ""),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (WeeklyDate? selectedWeek) {
-                  if (selectedWeek != null) {
-                    controller.selectedWeek.value = selectedWeek;
-                    // Reset selectedDay when week changes
-                    selectedDay.value = null;
-                    controller.fetchDailySchedule(selectedWeek.id);
-                  }
-                }
-              );
-            }),
+                        hint: const Text('Select a Week',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                        value: controller.selectedWeek.value,
+                        items: controller.filteredWeeks.map((WeeklyDate week) {
+                          return DropdownMenuItem<WeeklyDate>(
+                            value: week,
+                            child:  Text(week.weekName.isNotEmpty
+                                ? week.weekName
+                                : ''),
+                  
+                          );
+                        }).toList(),
+                        onChanged: (WeeklyDate? selectedWeek) {
+                          if (selectedWeek != null) {
+                            controller.selectedWeek.value = selectedWeek;
+                            // Reset selectedDay when week changes
+                            selectedDay.value = null;
+                            controller.fetchDailySchedule(selectedWeek.id);
+                          }
+                        }
+                    );
+                  }),
+                ),
+              ],
+            ),
             const SizedBox(height: 6,),
-
             // Day Selection Dropdown
             Obx(() {
-              if(controller.isLoading.value){
-                return Container();
-              }
+              // if(controller.isLoading.value){
+              //   return Container();
+              // }
               if (controller.dailyScheduleResponse.value == null) {
                 return Container(); // Do nothing if there's no schedule loaded
               }

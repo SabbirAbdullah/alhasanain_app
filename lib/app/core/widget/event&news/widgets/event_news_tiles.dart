@@ -1,16 +1,19 @@
 
+import 'package:alhasanain_app/app/core/values/app_colors.dart';
 import 'package:alhasanain_app/app/core/values/text_styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../modules/event_and_news/controller/event_news_controller.dart';
 import '../../../values/app_values.dart';
 import '../../../values/url.dart';
 import '../models/event_ news_ui_data.dart';
 
 class EventNewsTiles extends StatelessWidget {
-  const EventNewsTiles({
+  final EventNewsController  controller = Get.put(EventNewsController());
+   EventNewsTiles({
     super.key,
     required this.eventNewsUiData,
   });
@@ -21,7 +24,7 @@ class EventNewsTiles extends StatelessWidget {
     String formattedDateString = "${inputDate.day.toString().padLeft(2, '0')}/${inputDate.month.toString().padLeft(2, '0')}/${inputDate.year}";
     return InkWell(
       onTap: () =>Get.to(()=> AllEventNews(eventNewsUiData: eventNewsUiData,)),
-      child: Container( height: 271,width: 339,
+      child: Container( 
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
         child:Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -29,45 +32,52 @@ class EventNewsTiles extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    eventNewsUiData.name,
-                    style: blackText16_600
-                  ),
-                  Text(formattedDateString,
-                      style: greyText_13_400
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(AppValues.radius_8),
+                      child: CachedNetworkImage(
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        ),
+                        imageUrl: "${AppUrl.baseImageUrl}${eventNewsUiData.imageLink}",
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
-
+                    ),
+                  ),
+                  const SizedBox(width: 8), // spacing between image and text
+                  Expanded( // this prevents right overflow
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          eventNewsUiData.name,
+                          style: blackText16_600,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis, // optional
+                        ),
+                        Text(
+                          formattedDateString,
+                          style: greyText_13_400,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis, // optional
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(AppValues.radius_8),
-                child: CachedNetworkImage(
-                  width: 315,
-                  height: 140,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
 
-                      color:
-                          Colors.white, // Optional: You can use any color here
-                    ),
-                  ),
-                  imageUrl:
-                      "${AppUrl.baseImageUrl}${eventNewsUiData.imageLink}",
-                  errorWidget:
-                      (BuildContext context, String url, dynamic error) =>
-                          const Icon(Icons.error),
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -146,6 +156,7 @@ class AllEventNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.pageBackground,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

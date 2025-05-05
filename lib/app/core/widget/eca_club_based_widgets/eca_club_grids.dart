@@ -9,6 +9,7 @@ final String imageAsset;
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.all(8.0), // Margin around each item
       child: Padding(
         padding: const EdgeInsets.only(left:32.0,right: 32,top: 8,bottom: 8),

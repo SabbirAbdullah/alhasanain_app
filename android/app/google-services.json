@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "520758704933",
+    "project_id": "al-hasanain-a7472",
+    "storage_bucket": "al-hasanain-a7472.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520758704933:android:c1ba364ffccea68a3bb8cc",
+        "android_client_info": {
+          "package_name": "com.alhasanain.studant.parents.app.alhasanain_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy3QlCa5w9lEVNIOv5Dt2ZjyCZCEgn_zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

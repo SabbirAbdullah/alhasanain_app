@@ -1,4 +1,5 @@
 import 'package:alhasanain_app/app/core/values/app_colors.dart';
+import 'package:alhasanain_app/app/core/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
@@ -6,8 +7,8 @@ class PrivacyPolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(title: Text('Privacy Policy')),
-      body: Padding(
+      appBar: CustomAppBar(appBarTitleText: 'Privacy Policy')
+,      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(

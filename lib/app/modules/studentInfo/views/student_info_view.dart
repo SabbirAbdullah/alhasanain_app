@@ -38,10 +38,7 @@ class _StudentInfoState extends State<StudentInfo>
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.grey),
-          onPressed: () => Navigator.pop(context),
-        ),
+
         backgroundColor: AppColors.appBarColor,
         elevation: 1,
         title:  const Padding(

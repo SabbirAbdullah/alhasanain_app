@@ -9,6 +9,8 @@ import '../../../core/widget/event&news/widgets/event_news_tiles.dart';
 import '../controller/event_news_controller.dart';
 
 class EventNewsView extends BaseView<EventNewsController> {
+
+  final EventNewsController  controller = Get.put(EventNewsController());
   @override
   PreferredSizeWidget? appBar(BuildContext context) {
     return CustomAppBar(

@@ -117,7 +117,7 @@ class ParentStudentChoiceView extends BaseView<ParentsStudentChoiceController> {
 
   void _onTapNavigateStudent(String studentId) {
     controller.setStudentId(studentId);
-    Get.offAllNamed(
+    Get.toNamed(
       Routes.STUDENT_MAIN,
     );
   }

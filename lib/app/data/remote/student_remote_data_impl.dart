@@ -109,11 +109,7 @@ class StudentRemoteDataImpl extends BaseRemoteSource
       "session": queryParam.session,
       "student_id": queryParam.student_id,
       "termName": queryParam.termName,
-      "subject": queryParam.subject,
-      'date':''
-    }, queryParameters: {
-      "pageSize": queryParam.perPage,
-      "page": queryParam.pageNumber
+      'title':queryParam.title
     });
     try {
       return callApiWithErrorParser(dioCall)
@@ -246,11 +242,14 @@ class StudentRemoteDataImpl extends BaseRemoteSource
   }
 
 
+
   @override
   Future<AcademicCalenderResponse> getCalenderResponse(String month) {
 
-    var endpoint = "${DioProvider.baseUrl}/server/student/getStudentAcademicCalendar";
-    var dioCall = dioClient.post(endpoint, data:{"month":month});
+    var endpoint = "${DioProvider.baseUrl}/server/student/getStudentAcademicCalendarNew";
+    var dioCall = dioClient.post(endpoint, data:{
+      "month":month,
+    });
 
     try {
       return callApiWithErrorParser(dioCall)

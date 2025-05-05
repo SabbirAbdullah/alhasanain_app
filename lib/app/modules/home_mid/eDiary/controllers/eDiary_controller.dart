@@ -44,13 +44,6 @@ class EDairyController extends BaseController{
     getStudentEDairyData();
   }
   getStudentEDairyData() async {
-    if (!pagingController.canLoadNextPage()) {
-      print('Cannot load next page');
-      return;
-    }
-
-    pagingController.isLoadingPage = true;
-    print('Starting to load data');
 
     try {
       var formattedMonth = DateFormat('yyyy-MM').format(selectedDate);
@@ -75,8 +68,6 @@ class EDairyController extends BaseController{
       print('Data loaded successfully');
     } catch (e) {
       print('Error loading data: $e');
-    } finally {
-      pagingController.isLoadingPage = false;
     }
   }
 
@@ -105,17 +96,11 @@ class EDairyController extends BaseController{
     ))
         .toList();
 
-    if (_isLastPage(pagingController.pageNumber, 1)) {
-      pagingController.appendLastPage(repoList!);
-    } else {
-      pagingController.appendPage(repoList!);
-    }
 
-    var newList = [...pagingController.listItems];
 
-    _githubProjectListController(newList);
+    _githubProjectListController(repoList);
 
-    getSubjectList(studentDataResponseUi.studentClass);
+    // getSubjectList(studentDataResponseUi.studentClass);
   }
 
   bool _isLastPage(int currentPage, int totalCount) {

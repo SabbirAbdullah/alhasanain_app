@@ -7,8 +7,11 @@ import 'package:alhasanain_app/app/core/widget/event&news/models/event_%20news_u
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../data/model/exam_schedule__model.dart';
+import '../../../data/model/notification_model.dart';
 import '../../../data/model/student_data_response.dart';
+import '../../../data/remote/notification_remote_data.dart';
 import '../../../data/repository/exam_schedule_repository_impl.dart';
+import '../../../data/repository/notification_repository.dart';
 import '../../../data/repository/pref_repository.dart';
 import '../../../data/repository/student_payment_repository.dart';
 import '../../daily_lesson/model/day_model.dart';
@@ -28,17 +31,20 @@ class HomeController extends BaseController {
   final StudentPaymentRepository _paymentRepository =
   Get.find(tag: (StudentPaymentRepository).toString());
 
-
-
   final RxList<EventNewsUiData> _eventNewsListController = RxList.empty();
 
   List<EventNewsUiData> get eventNewsDataList =>
       _eventNewsListController.toList();
-
-  Rx<String> userType = ''.obs;
-  var isLoading = true.obs;
+  /////
   var dailyScheduleResponse = Rxn<WeeklyScheduleResponse>();
   final DailyLessonDataImpl repository = Get.put(DailyLessonDataImpl());
+  final ExamScheduleRepositoryImpl _scheduleRepository = Get.put(ExamScheduleRepositoryImpl());
+  var latestExamSchedules = <ExamScheduleModel>[].obs;
+
+  final NotificationRepository _notificationRepository= Get. put(NotificationRepository());
+  Rx<String> userType = ''.obs;
+  var isLoading = true.obs;
+
   final String todayDay = DateFormat('EEEE').format(DateTime.now());
   var hasError = false.obs;
 
@@ -83,8 +89,6 @@ class HomeController extends BaseController {
         String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
         for (var week in weeklyResponse.message) {
           if (week.dates.contains(todayDate)) {
-            // print('Match found for today\'s date: $todayDate');
-            // print('Returning week ID: ${week.id}');
 
             //step :4
             WeeklyScheduleResponse scheduleResponse = (await repository.getDailyScheduleById(week.id));
@@ -97,7 +101,6 @@ class HomeController extends BaseController {
                 //  print('Match found for today\'s day: $todayDay');
                 // print('Subjects for today: ${daySchedule.subjects.map((e) => e.subject).toList()}');
                 return daySchedule.subjects;
-
               }
             }
           }
@@ -132,8 +135,52 @@ class HomeController extends BaseController {
     }
   }
 
-  final ExamScheduleRepositoryImpl _scheduleRepository = Get.put(ExamScheduleRepositoryImpl());
-  var latestExamSchedules = <ExamScheduleModel>[].obs;
+
+
+  var notifications = <NotificationItem>[].obs;
+  var currentPage = 1.obs;
+  var totalPages = 1.obs;
+
+  var unseenCount = 0.obs;
+
+
+
+   fetchNotifications({required int page}) async {
+
+    try {
+      isLoading(true);
+      final response = await _notificationRepository.fetchNotifications(studentId: studentDataList[0].studentId, page: page);
+      notifications.assignAll(response.notifications);
+      currentPage.value = response.currentPage;
+      totalPages.value = response.totalPages;
+      updateUnseenCount();
+    } catch (e) {
+      print('Error fetching notifications: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void updateUnseenCount() {
+    unseenCount.value = notifications.where((n) => !n.readMsg).length;
+  }
+
+  Future<void> markAsRead(NotificationItem notification) async {
+    if (!notification.readMsg) {
+      final success = await _notificationRepository.markNotificationAsRead(notification.id);
+      if (success) {
+        notification.readMsg = true;
+        updateUnseenCount();
+        notifications.refresh(); // update the UI
+      }
+    }
+  }
+
+  void changePage(int page) {
+    if (page > 0 && page <= totalPages.value) {
+      fetchNotifications(page: page);
+    }
+  }
 
   void fetchExamSchedule() async {
     try {
@@ -163,7 +210,7 @@ class HomeController extends BaseController {
       isLoading.value = false;
     }
   }
-
+  //
 
   getEventNewsData(String session, String className) async {
     EventNewsQueryPrem eventNewsQueryPrem =
@@ -247,6 +294,10 @@ class HomeController extends BaseController {
         .toList();
     _studentDataListController(repoList);
     fetchExamSchedule();
+    fetchNotifications(page: 1);
+    fetchSubjectsForToday();
+    checkTerm();
+
 
   }
 
@@ -257,7 +308,7 @@ class HomeController extends BaseController {
   @override
   void onInit() {
     checkTerm();
-    fetchExamSchedule();
+
     var data = Get.arguments;
     if (data is String) {
       id = data;

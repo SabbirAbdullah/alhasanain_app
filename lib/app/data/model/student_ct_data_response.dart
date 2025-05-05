@@ -32,6 +32,7 @@ class Message {
   String? termName;
   String? school;
   String? className;
+  String ? campus;
   String? section;
   String? subject;
   String? title;
@@ -61,6 +62,7 @@ class Message {
     id = json['id'];
     termName = json['termName'];
     school = json['school'];
+    campus = json['campus'];
     className = json['className'];
     section = json['section'];
     subject = json['subject'];
@@ -80,6 +82,7 @@ class Message {
     data['school'] = this.school;
     data['className'] = this.className;
     data['section'] = this.section;
+    data['campus']= this.campus;
     data['subject'] = this.subject;
     data['title'] = this.title;
     data['marks'] = this.marks;
@@ -91,3 +94,5 @@ class Message {
     return data;
   }
 }
+
+

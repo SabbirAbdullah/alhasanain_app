@@ -1,5 +1,6 @@
 // views/delete_account_page.dart
 import 'package:alhasanain_app/app/core/values/app_colors.dart';
+import 'package:alhasanain_app/app/core/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,7 @@ class DeleteAccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(title: const Text('Delete My Account')),
+      appBar: CustomAppBar(appBarTitleText: 'Delete My Account'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -30,11 +31,13 @@ class DeleteAccountPage extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
               child: ElevatedButton.icon(
+                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color(
+                    0xfdffffff))),
                 onPressed: () {
                   controller.sendDeleteRequest();
                 },
-                icon: const Icon(Icons.email),
-                label: const Text('Request Delete'),
+                icon: const Icon(Icons.email,color: AppColors.appBarColor,),
+                label: const Text('Request Delete',style: TextStyle(color: AppColors.appBarColor),),
               ),
             ),
           ],

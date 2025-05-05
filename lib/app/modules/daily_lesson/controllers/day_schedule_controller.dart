@@ -10,6 +10,8 @@ class WeeklyDatesController extends GetxController {
   var selectedWeek = Rxn<WeeklyDate>();
   var isLoading = true.obs;
   var dailyScheduleResponse = Rxn<WeeklyScheduleResponse>();
+  final filteredWeeks = <WeeklyDate>[].obs;
+  final selectedMonth = Rxn<int>();
 
   Future<void> fetchWeeklyDates(String term, int classId, int sectionId, String campus, String session) async {
     isLoading(true);
@@ -21,6 +23,15 @@ class WeeklyDatesController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  void filterWeeksByMonth(int month) {
+    selectedMonth.value = month;
+    filteredWeeks.value = weeklyDates.where((week) {
+      final startMonth = DateTime.parse(week.startDate).month;
+      final endMonth = DateTime.parse(week.endDate).month;
+      return startMonth == month || endMonth == month;
+    }).toList();
   }
 
   Future<void> fetchDailySchedule(int weekId) async {

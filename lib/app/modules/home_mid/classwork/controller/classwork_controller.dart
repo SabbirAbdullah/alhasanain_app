@@ -57,6 +57,11 @@ class ClassWorkController extends BaseController{
   @override
   void onInit() {
     checkTerm();
+    String today = "${DateTime.now().day.toString().padLeft(2, '0')}-"
+        "${DateTime.now().month.toString().padLeft(2, '0')}-"
+        "${DateTime.now().year}";
+    selectedDate.value = today;
+    fetchClassworks(today);
     var dataModel = Get.arguments;
     if (dataModel is StudentDataResponseUi) {
       studentDataResponseUi=dataModel;

@@ -18,6 +18,7 @@
     <!--    </queries>-->
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:label="Al Hasanain"
         android:name="${applicationName}"

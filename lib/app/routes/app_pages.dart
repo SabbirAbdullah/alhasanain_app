@@ -11,6 +11,8 @@ import 'package:alhasanain_app/app/modules/home_mid/eDiary/bindings/eDiary_bindi
 import 'package:alhasanain_app/app/modules/home_mid/eDiary/views/eDiary_view.dart';
 import 'package:alhasanain_app/app/modules/home_mid/homework/bindings/homework_binding.dart';
 import 'package:alhasanain_app/app/modules/home_mid/homework/views/homework_view.dart';
+import 'package:alhasanain_app/app/modules/notification/bindings/notification_bindings.dart';
+import 'package:alhasanain_app/app/modules/notification/view/notification_view.dart';
 
 import 'package:alhasanain_app/app/modules/parents_students_choice/binding/parents_studens_choice_binding.dart';
 import 'package:alhasanain_app/app/modules/privacy_policies/terms_condition.dart';
@@ -133,11 +135,11 @@ class AppPages {
       binding: ParentsStudentChoiceBinding(),
     ),
 
-    // GetPage(
-    //   name: _Paths.PARENTS_STUDENT_PAYMENT_VIEW,
-    //   page: () => StudentFeesPaymentView(),
-    //   binding: StudentFeesPaymentBindings(),
-    // ),
+    GetPage(
+      name: _Paths.PARENTS_STUDENT_PAYMENT_VIEW,
+      page: () => StudentFeesPaymentView(),
+      binding: StudentFeesPaymentBindings(),
+    ),
     GetPage(
       name: _Paths.EVENT_AND_NEWS,
       page: () => EventNewsView(),
@@ -179,5 +181,10 @@ class AppPages {
       binding: DailyLessonBinding(),
     ),
 
+    GetPage(
+      name: _Paths.NOTIFICATION,
+      page: () => NotificationHistoryPage(),
+      binding: NotificationBindings(),
+    ),
   ];
 }

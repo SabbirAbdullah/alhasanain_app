@@ -7,8 +7,8 @@ import '/app/network/exceptions/base_exception.dart';
 import '/flavors/build_config.dart';
 
 abstract class BaseRemoteSource {
-  Dio get dioClient => DioProvider.dioWithHeaderToken;
 
+  Dio get dioClient => DioProvider.dioWithHeaderToken;
   final logger = BuildConfig.instance.config.logger;
 
   Future<Response<T>> callApiWithErrorParser<T>(Future<Response<T>> api) async {

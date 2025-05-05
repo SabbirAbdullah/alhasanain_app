@@ -14,6 +14,7 @@ class ECAClub extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.pageBackground,
         appBar: AppBar(        elevation: 1,
           iconTheme: const IconThemeData(color: AppColors.appBarIconColor),
           centerTitle: true,

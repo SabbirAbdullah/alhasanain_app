@@ -21,8 +21,8 @@ const subtitleTextStyle = TextStyle(
 );
 
 
-const greenAmountStyle = TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 14);
-
+const greenAmountStyle = TextStyle(fontWeight: FontWeight.bold,color: AppColors.appBarColor,fontSize: 14);
+const redAmountStyle = TextStyle(fontWeight: FontWeight.w500,color: Colors.red,fontSize: 12);
 const errorTextStyle = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.w400,
@@ -87,14 +87,23 @@ const blackText16_600 = TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w600,
 color: Colors.black);
+
 const blueText12_500 = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.w500,
   color: AppColors.appBarColor,
 );
+const text12_600 = TextStyle(
+  fontSize: 12,
+  fontWeight: FontWeight.w600,
+  color: Colors.black87
+);
 
-
-
+const text14_600 = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.black87
+);
 const whiteText12 = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.w400,

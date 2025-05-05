@@ -8,10 +8,8 @@ import '../controllers/ct_controller.dart';
 import '../model/ct_data_ui.dart';
 
 class CtScreen extends BaseView<CTController> {
+  final CTController controller = Get.put(CTController());
   CtScreen(){
-    controller.checkTerm();
-
-
   }
 
   @override
@@ -38,6 +36,46 @@ class CtScreen extends BaseView<CTController> {
             padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8, bottom: 8),
             child: Row(
               children: [
+                Expanded(
+                  child: Obx(() => DropdownButtonFormField(
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    hint: const Text(
+                      "Select Term",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(8),
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    value: controller.selectedTerm.value.isNotEmpty
+                        ? controller.selectedTerm.value
+                        : null,
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        controller.updateTerm(newValue);
+                     controller.getStudentCTList();
+                      }
+                    },
+
+                    items: controller.terms
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value, style: const TextStyle(fontSize: 16)),
+                      );
+                    }).toList(),
+                  )),
+                ),
+                SizedBox(width: 6,),
                 // Dropdown for selecting CT
                 Expanded(
                   child: Obx(() => DropdownButtonFormField(
@@ -65,8 +103,10 @@ class CtScreen extends BaseView<CTController> {
                     onChanged: (newValue) {
                       if (newValue != null) {
                         controller.updateSelectedItem(newValue);
+                        controller.getStudentCTList();  // 👈 call the function here
                       }
                     },
+
                     items: controller.items
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -76,50 +116,7 @@ class CtScreen extends BaseView<CTController> {
                     }).toList(),
                   )),
                 ),
-                // Month picker (optional)
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(8),
-                //       color: Colors.white,
-                //       border: Border.all(
-                //         color: Colors.black12,
-                //       ),
-                //     ),
-                //     child: Padding(
-                //       padding: EdgeInsets.zero,
-                //       child: SizedBox(
-                //         height: 45,
-                //         child: Row(
-                //           children: [
-                //             IconButton(
-                //               padding: EdgeInsets.zero,
-                //               onPressed: () {
-                //                 showMonthPicker(
-                //                   context: context,
-                //                   initialDate: DateTime.now(),
-                //                 ).then((date) {
-                //                   if (date != null) {
-                //                     // Handle selected date (if needed)
-                //                   }
-                //                 });
-                //               },
-                //               icon: const Icon(Icons.date_range, size: 20),
-                //             ),
-                //             const Text(
-                //               "Month",
-                //               style: TextStyle(fontSize: 12),
-                //             ),
-                //             const SizedBox(
-                //               width: 10,
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+
               ],
             ),
           ),

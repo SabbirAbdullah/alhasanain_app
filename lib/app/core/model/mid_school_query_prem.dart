@@ -1,4 +1,5 @@
-class MidSchoolReportQueryPrem {
+class
+MidSchoolReportQueryPrem {
   String? className;
   String? termName;
   String? studentId;

@@ -13,36 +13,37 @@ Widget filterCard() {
       children: [
         const Text(
           "All Payment",
-          style: titleStyle,
+          style: blackText16_600,
         ),
-        SizedBox(
-          width: 120,
-          child: DropdownButtonFormField(
-            icon: const Icon(Icons.keyboard_arrow_down),
-            hint: const Text("All", style: TextStyle(fontSize: 12)),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Choose type*';
-              }
-              return null;
-            },
-            decoration: lightBorderTextFieldDecoration,
-            onChanged: (newValue) {},
-            items: <String>[
-              "All",
-              "Due",
-              "Paid",
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+        SizedBox(height: 8,),
+        // SizedBox(
+        //   width: 120,
+        //   child: DropdownButtonFormField(
+        //     icon: const Icon(Icons.keyboard_arrow_down),
+        //     hint: const Text("All", style: TextStyle(fontSize: 12)),
+        //     validator: (value) {
+        //       if (value == null || value.isEmpty) {
+        //         return 'Choose type*';
+        //       }
+        //       return null;
+        //     },
+        //     decoration: lightBorderTextFieldDecoration,
+        //     onChanged: (newValue) {},
+        //     items: <String>[
+        //       "All",
+        //       "Due",
+        //       "Paid",
+        //     ].map<DropdownMenuItem<String>>((String value) {
+        //       return DropdownMenuItem<String>(
+        //         value: value,
+        //         child: Text(
+        //           value,
+        //           style: const TextStyle(fontSize: 16),
+        //         ),
+        //       );
+        //     }).toList(),
+        //   ),
+        // ),
       ],
     ),
   );

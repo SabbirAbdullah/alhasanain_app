@@ -1,6 +1,8 @@
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../data/repository/fcm_token_repository.dart';
 import '../../../data/repository/pref_repository.dart';
 import '../../../modules/about_alhasanain/view/about_alhasanain.dart';
 import '../../../modules/academic_calender/views/academic_calender_view.dart';
@@ -9,17 +11,22 @@ import '../../../modules/account_delete/view/delete_view.dart';
 import '../../../modules/complain/view/complain.dart';
 import '../../../modules/eca/ecaClub/view/ecaClub_view.dart';
 import '../../../modules/home/model/student_ui_data.dart';
+import '../../../modules/home_mid/result/result_view.dart';
+import '../../../modules/home_mid/result/term_report/view/term_report.dart';
+import '../../../modules/incident_report/view/incident_view.dart';
 import '../../../modules/studentInfo/views/student_info_view.dart';
 import '../../../routes/app_pages.dart';
 import '../../values/app_colors.dart';
 import '../../values/text_styles.dart';
 import 'drawer_header_info.dart';
 import 'nav_drawer_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key, required this.studentDataResponseUi, required this.userType}) : super(key: key);
   final StudentDataResponseUi studentDataResponseUi;
   final String userType;
+
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
@@ -53,24 +60,26 @@ class _NavDrawerState extends State<NavDrawer> {
                         .push(MaterialPageRoute(builder: (context) => StudentInfo(studentDataResponse: widget.studentDataResponseUi,)));
                   },
                 ),
-                // widget.userType=="Parents"?ListTile(
-                //   leading: Icon(Icons.attach_money),
-                //   title: Text('Fees'),
-                //   onTap:_onTapNavigateFees,
-                // ):Container(),
+                widget.userType=="Parents"?ListTile(
+                  leading: Icon(Icons.attach_money),
+                  title: Text('Fees'),
+                  onTap:_onTapNavigateFees,
+                ):Container(),
         
-                // ListTile(
-                //   leading: Icon(Icons.school),
-                //   title: Text('Results'),
-                //   onTap: ()=>_onNavigateReportList(widget.studentDataResponseUi),
-                // ),
+                ListTile(
+                  leading: Icon(Icons.school),
+                  title: Text('Results'),
+                  onTap: (){
+                    Get.to(()=>ResultView(studentDataResponseUi: widget.studentDataResponseUi,));
+
+                  }),
         
                 widget.userType=="Parents"? ListTile(
                   leading: Icon(Icons.report_outlined),
                   title: Text('Complain'),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Complain()));
-                  },
+                    Get.to(()=>Complain(studentDataResponseUi: widget.studentDataResponseUi))
+;                  },
                 ):Container(),
                 ListTile(
                   leading: Icon(Icons.school_outlined),
@@ -99,6 +108,12 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () =>Get.to(()=>AcademicCalendarPage())
                   // onTap: () =>_navigateAcademicCalender(widget.studentDataResponseUi),
                 ),
+                widget.userType=="Parents"? ListTile(
+                    leading: Icon(Icons.report_problem_outlined),
+                    title: Text('Incident Report'),
+                    onTap: () =>Get.to(()=>IncidentView(studentDataResponseUi: widget.studentDataResponseUi,))
+                  // onTap: () =>_navigateAcademicCalender(widget.studentDataResponseUi),
+                ): Container(),
         
                 ListTile(
                   leading: Icon(Icons.info_outline),
@@ -151,17 +166,59 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
     );
   }
+  Future<void> _logout() async {
+    try {
+      // Delete the FCM token from device
+      await FirebaseMessaging.instance.deleteToken();
+      print('✅ FCM token cleared from device');
 
-  void _logout()async{
-   await _prefRepository.remove("token");
-   await _prefRepository.remove("id");
-   await _prefRepository.remove("type");
+      // Clear app stored data
+      await _prefRepository.remove("token");
+      await _prefRepository.remove("id");
+      await _prefRepository.remove("type");
+      await _prefRepository.remove("fcm_token");
 
+      // Optionally: you can also hit an API to remove token server-side if needed
+    } catch (e) {
+      print('❌ Error while logout: $e');
+    }
   }
+
   Future<void> _onTapNavigateStudentCT() async {
-    _logout();
-    Get.offAllNamed(Routes.MAIN,);
+    await _logout();
+    Get.offAllNamed(Routes.MAIN);
   }
+
+
+
+  // final FcmRepository fcmRepository =  Get.put(FcmRepository());
+  Future<void> clearFcmToken() async {
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+      print('FCM token cleared');
+    } catch (e) {
+      print('Error clearing FCM token: $e');
+    }
+  }
+
+  // Future<void> clearToken() async {
+  //
+  //   String? token = null;
+  //   var user = await _prefRepository.getString("id");
+  //   var type = await _prefRepository.getString("type");
+  //
+  //   if (user.isNotEmpty && type.isNotEmpty) {
+  //     final success = await fcmRepository.updateDeviceToken(user, type, token!);
+  //     if (success) {
+  //       print('✅ FCM token sent successfully');
+  //     } else {
+  //       print('❌ Failed to send FCM token');
+  //     }
+  //   } else {
+  //     print('⚠️ User info not found');
+  //   }
+  // }
+
 
 
  void _onTapNavigateFees(){

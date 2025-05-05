@@ -22,7 +22,6 @@ abstract class BaseController extends GetxController {
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
-
   //
   final Logger logger = BuildConfig.instance.config.logger;
 

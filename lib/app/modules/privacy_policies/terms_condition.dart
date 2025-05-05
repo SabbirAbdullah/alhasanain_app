@@ -1,4 +1,5 @@
 import 'package:alhasanain_app/app/core/values/app_colors.dart';
+import 'package:alhasanain_app/app/core/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class TermsAndConditionsPage extends StatelessWidget {
@@ -6,10 +7,7 @@ class TermsAndConditionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(
-        title: Text('Terms & Conditions'),
-
-      ),
+      appBar:CustomAppBar(appBarTitleText: 'Terms & Conditions'),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(

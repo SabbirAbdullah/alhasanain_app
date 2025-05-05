@@ -3,6 +3,7 @@ import 'package:alhasanain_app/app/core/base/base_view.dart';
 import 'package:alhasanain_app/app/core/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/widget/loading.dart';
 import '../controller/classwork_controller.dart';
 
 
@@ -26,45 +27,47 @@ class ClassWorkView extends BaseView<ClassWorkController>{
           children: [
             Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Container(
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade100,
-                    spreadRadius: 2,
-                    blurRadius: 1,
-                  )
-                ],
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.black12,
-                  ),),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.calendar_today_outlined),
-                      onPressed: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (pickedDate != null) {
-                          String formattedDate = pickedDate.toIso8601String().split('T')[0];
-                          controller.selectedDate.value = formattedDate;
-                          controller.fetchClassworks(formattedDate);
-                        }
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    Obx(() {
-                      return Text(
-                        controller.selectedDate.isEmpty ? 'Select a date' : controller.selectedDate.value,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                      );
-                    }),
+              child: GestureDetector(
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (pickedDate != null) {
+                    String formattedDate = pickedDate.toIso8601String().split('T')[0];
+                    controller.selectedDate.value = formattedDate;
+                    controller.fetchClassworks(formattedDate);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade100,
+                      spreadRadius: 2,
+                      blurRadius: 1,
+                    )
                   ],
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.black12,
+                    ),),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_today_outlined),
+
+                      const SizedBox(width: 10),
+                      Obx(() {
+                        return Text(
+                          controller.selectedDate.isEmpty ? 'Select a date' : controller.selectedDate.value,
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -72,7 +75,7 @@ class ClassWorkView extends BaseView<ClassWorkController>{
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: Loading());
                 }
                 if (controller.classworks.isEmpty) {
                   return const Center(child: Text('No classwork found'));

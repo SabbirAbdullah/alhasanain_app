@@ -1,5 +1,6 @@
 import 'package:alhasanain_app/app/core/values/app_colors.dart';
 import 'package:alhasanain_app/app/core/values/text_styles.dart';
+import 'package:alhasanain_app/app/core/widget/custom_app_bar.dart';
 import 'package:alhasanain_app/app/core/widget/login_screen_based_widgets/login_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -91,13 +92,7 @@ class Aboutalhasanain extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'About Al Hasanain',
-          style: whiteText16_500,
-        ),
-      ),
+      appBar: CustomAppBar(appBarTitleText: 'About Al Hasanain'),
       body: SingleChildScrollView(
         child: Column(
           children: [
